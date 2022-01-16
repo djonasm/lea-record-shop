@@ -32,8 +32,11 @@ class Controller extends BaseController
     public function create(Request $request): JsonResponse
     {
         $data = [];
+        $order = new Model();
+        $order->fill($request->only('clientId', 'recordId', 'startDate', 'endDate'));
+        $order->save();
 
-        return response()->json(['status' => 'success', 'data' => $data]);
+        return response()->json(['status' => 'success', 'data' => $order->attributesToArray()]);
     }
 
     public function delete(Request $request): JsonResponse
