@@ -28,4 +28,25 @@ class Controller extends BaseController
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
+
+    public function create(Request $request): JsonResponse
+    {
+        $data = [];
+
+        return response()->json(['status' => 'success', 'data' => $data]);
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        $data = [];
+
+        return response()->json(['status' => 'success', 'data' => $data]);
+    }
+
+    public function update(Request $request): JsonResponse
+    {
+        $data = [];
+
+        return response()->json(['status' => 'success', 'data' => $data]);
+    }
 }
