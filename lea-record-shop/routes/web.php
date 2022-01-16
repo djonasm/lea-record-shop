@@ -13,6 +13,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => 'v1'], function () use ($router) {
+
+    // Order
+    $router->group(['prefix' => 'order', 'namespace'], function () use ($router) {
+
+        $router->get('', '\LeaRecordShop\Order\Controller@list');
+    });
 });
