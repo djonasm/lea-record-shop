@@ -9,19 +9,19 @@ class Service
         ?string $startDate = null,
         ?string $endDate = null
     ): array {
-        $query = [];
+        $query = Model::query();
         if ($clientId) {
-            $query = array_merge($query, compact('clientId'));
+            $query->where(compact('clientId'));
         }
 
-        if ($startDate) {
-            $query = array_merge($query, compact('startDate'));
+        if ($startDate && $endDate) {
+            $query->where('createdAt', '>=', $startDate);
         }
 
         if ($endDate) {
-            $query = array_merge($query, compact('endDate'));
+            $query->where('createdAt', '<=', $endDate);
         }
 
-        return Model::where($query)->get()->toArray();
+        return $query->get()->toArray();
     }
 }
