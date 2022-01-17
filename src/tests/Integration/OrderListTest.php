@@ -17,7 +17,7 @@ class OrderListTest extends IntegrationTestCase
         $factory->create(['clientId' => 2]);
 
         // Actions
-        $this->call('GET', '/v1/order', ['clientId' => 2]);
+        $this->call('GET', '/api/v1/order', ['clientId' => 2]);
         $responseData = json_decode($this->response->getContent(), true)['data'];
 
         // Assertions
@@ -39,7 +39,7 @@ class OrderListTest extends IntegrationTestCase
         // Actions
         $this->call(
             'GET',
-            '/v1/order',
+            'api/v1/order',
             [
                 'startDate' => $minusTenDaysDate->format(DateTime::ATOM),
                 'endDate' => $minusThreeDaysDate->format(DateTime::ATOM),
