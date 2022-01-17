@@ -3,18 +3,23 @@
 namespace Tests\Integration;
 
 use Database\Factories\OrderFactory;
-use Tests\TestCase;
+use Tests\IntegrationTestCase;
 
-class OrderListTest extends TestCase
+class OrderListTest extends IntegrationTestCase
 {
     public function testShouldFilterOrdersByClientId(): void
     {
         // Set
         $factory = $this->app->make(OrderFactory::class);
-        $factory->create();
+        $factory->create(['clientId' => 1]);
+        $factory->create(['clientId' => 1]);
+        $factory->create(['clientId' => 2]);
 
-        $this->get('/v1/order');
+        // Actions
+        $this->call('GET', '/v1/order', ['clientId' => 2]);
+        $responseData = json_decode($this->response->getContent())['data'];
 
-        dump($this->response->getContent());
+        // Assertions
+        $this->assertCount(1, $responseData);
     }
 }
