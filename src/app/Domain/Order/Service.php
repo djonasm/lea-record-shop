@@ -9,6 +9,6 @@ class Service
         ?string $startDate = null,
         ?string $endDate = null
     ): array {
-        return [];
+        return Model::all()->toArray();
     }
 }

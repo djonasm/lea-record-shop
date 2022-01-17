@@ -31,9 +31,8 @@ class Controller extends BaseController
 
     public function create(Request $request): JsonResponse
     {
-        $data = [];
         $order = new Model();
-        $order->fill($request->only('clientId', 'recordId', 'startDate', 'endDate'));
+        $order->fill($request->only('clientId', 'recordId'));
         $order->save();
 
         return response()->json(['status' => 'success', 'data' => $order->attributesToArray()]);
