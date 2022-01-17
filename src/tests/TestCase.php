@@ -15,4 +15,16 @@ abstract class TestCase extends BaseTestCase
     {
         return require __DIR__.'/../bootstrap/app.php';
     }
+
+    protected function instance($abstract, $instance)
+    {
+        $this->app->bind(
+            $abstract,
+            function () use ($instance) {
+                return $instance;
+            }
+        );
+
+        return $instance;
+    }
 }

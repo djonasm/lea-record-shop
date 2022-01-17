@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration;
+namespace Integration;
 
 use Database\Factories\OrderFactory;
 use DateTime;

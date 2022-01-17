@@ -14,7 +14,7 @@ class Service
             $query->where(compact('clientId'));
         }
 
-        if ($startDate && $endDate) {
+        if ($startDate) {
             $query->where('createdAt', '>=', $startDate);
         }
 

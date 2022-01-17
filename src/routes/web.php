@@ -17,9 +17,9 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
 
     // Order
     $router->group(['prefix' => 'order', 'namespace'], function () use ($router) {
-        $router->get('', '\LeaRecordShop\Order\Controller@list');
-        $router->post('', '\LeaRecordShop\Order\Controller@create');
-        $router->delete('{id}', '\LeaRecordShop\Order\Controller@delete');
-        $router->put('{id}', '\LeaRecordShop\Order\Controller@update');
+        $router->get('', 'OrderController@list');
+        $router->post('', 'OrderController@create');
+        $router->delete('{id}', 'OrderController@delete');
+        $router->put('{id}', 'OrderController@update');
     });
 });
