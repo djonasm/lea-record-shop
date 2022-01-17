@@ -17,7 +17,7 @@ class OrderListTest extends IntegrationTestCase
 
         // Actions
         $this->call('GET', '/v1/order', ['clientId' => 2]);
-        $responseData = json_decode($this->response->getContent())['data'];
+        $responseData = json_decode($this->response->getContent(), true)['data'];
 
         // Assertions
         $this->assertCount(1, $responseData);
