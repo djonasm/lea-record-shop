@@ -22,7 +22,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'clientId' => $this->faker->randomNumber(),
+            'userId' => $this->faker->randomNumber(),
             'recordId' => $this->faker->randomNumber(),
         ];
     }

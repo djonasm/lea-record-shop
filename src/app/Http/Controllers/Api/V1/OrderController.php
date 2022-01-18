@@ -36,16 +36,16 @@ class OrderController extends BaseController
      * Get orders.
      *
      * This endpoint allows you to get orders.
-     * It`s possible to use clientId, startDate or endDate filter.
+     * It`s possible to use userId, startDate or endDate filter.
      *
-     * @urlParam clientId integer The id of the client.
+     * @urlParam userId integer The id of the client.
      * @urlParam startDate The filter for minimum order created date. Example: 2020-08-15T15:52:01+00:00
      * @urlParam endDate The filter for maximum order created date. Example: 2021-08-15T15:52:01+00:00
      */
     public function list(Request $request): JsonResponse
     {
         $data = $this->service->list(
-            $request->get('clientId'),
+            $request->get('userId'),
             $request->get('startDate'),
             $request->get('endDate'),
         );
@@ -56,12 +56,12 @@ class OrderController extends BaseController
     /**
      * Create a order.
      *
-     * @bodyParam clientId int required The id of the client. Example: 1
+     * @bodyParam userId int required The id of the client. Example: 1
      * @bodyParam recordId int required The id of the record. Example: 9
      *
      * @response scenario=success {
      *  "id": 4,
-     *  "clientId": 6,
+     *  "userId": 6,
      *  "recordId": 9
      * }
      *
@@ -70,7 +70,7 @@ class OrderController extends BaseController
     public function create(Request $request): JsonResponse
     {
         try {
-            $data = $this->repository->create($request->only('clientId', 'recordId'));
+            $data = $this->repository->create($request->only('userId', 'recordId'));
         } catch (InvalidArgumentException $exception) {
             return response()->json(['status' => 'failed', 'message' => 'Invalid input'], 422);
         }
@@ -83,7 +83,7 @@ class OrderController extends BaseController
      *
      * @urlParam id integer require The id of the order.
      *
-     * @bodyParam clientId int The id of the client. Example: 1
+     * @bodyParam userId int The id of the client. Example: 1
      * @bodyParam recordId int The id of the record. Example: 9
      */
     public function delete(int $id): JsonResponse
@@ -100,12 +100,12 @@ class OrderController extends BaseController
      *
      * @urlParam id integer require The id of the order.
      *
-     * @bodyParam clientId int The id of the client. Example: 1
+     * @bodyParam userId int The id of the client. Example: 1
      * @bodyParam recordId int The id of the record. Example: 9
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        if (!$this->repository->update($id, $request->only('clientId', 'recordId'))) {
+        if (!$this->repository->update($id, $request->only('userId', 'recordId'))) {
             return response()->json(['status' => 'failed', 422]);
         }
 

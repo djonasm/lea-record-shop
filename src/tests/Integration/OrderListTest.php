@@ -12,12 +12,12 @@ class OrderListTest extends IntegrationTestCase
     {
         // Set
         $factory = $this->app->make(OrderFactory::class);
-        $factory->create(['clientId' => 1]);
-        $factory->create(['clientId' => 1]);
-        $factory->create(['clientId' => 2]);
+        $factory->create(['userId' => 1]);
+        $factory->create(['userId' => 1]);
+        $factory->create(['userId' => 2]);
 
         // Actions
-        $this->call('GET', '/api/v1/order', ['clientId' => 2]);
+        $this->call('GET', '/api/v1/order', ['userId' => 2]);
         $responseData = json_decode($this->response->getContent(), true)['data'];
 
         // Assertions

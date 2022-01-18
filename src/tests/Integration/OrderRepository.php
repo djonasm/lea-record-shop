@@ -12,14 +12,14 @@ class OrderRepository extends IntegrationTestCase
     {
         // Set
         $factory = $this->app->make(OrderFactory::class);
-        $order = $factory->create(['clientId' => 1]);
+        $order = $factory->create(['userId' => 1]);
         $newClientId = 2;
 
         // Actions
-        $this->put('api/v1/order/'.$order->id, ['clientId' => $newClientId]);
+        $this->put('api/v1/order/'.$order->id, ['userId' => $newClientId]);
         $result = Model::all()->first();
 
-        $this->assertSame($newClientId, $result->clientId);
+        $this->assertSame($newClientId, $result->userId);
     }
 
     public function testShouldDeleteOrder()

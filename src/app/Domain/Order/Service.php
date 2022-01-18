@@ -5,13 +5,13 @@ namespace LeaRecordShop\Order;
 class Service
 {
     public function list(
-        ?string $clientId = null,
+        ?string $userId = null,
         ?string $startDate = null,
         ?string $endDate = null
     ): array {
         $query = Model::query();
-        if ($clientId) {
-            $query->where(compact('clientId'));
+        if ($userId) {
+            $query->where(compact('userId'));
         }
 
         if ($startDate) {

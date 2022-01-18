@@ -5,9 +5,9 @@ namespace Unit\Order;
 use Exception;
 use LeaRecordShop\Order\Model;
 use LeaRecordShop\Order\Repository;
-use Tests\IntegrationTestCase;
+use Tests\TestCase;
 
-class RepositoryTest extends IntegrationTestCase
+class RepositoryTest extends TestCase
 {
     public function testShouldCreateOrderWithSuccess(): void
     {
@@ -15,10 +15,13 @@ class RepositoryTest extends IntegrationTestCase
         $repository = new Repository();
 
         // Avoid to use database
-        $model = $this->instance(Model::class, $this->createMock(Model::class));
+        $model = $this->instance(
+            Model::class,
+            $this->createMock(Model::class)
+        );
 
         $data = [
-            'clientId' => 123123,
+            'userId' => 123123,
             'recordId' => 321321
         ];
 
@@ -49,10 +52,13 @@ class RepositoryTest extends IntegrationTestCase
         $repository = new Repository();
 
         // Avoid to use database
-        $model = $this->instance(Model::class, $this->createMock(Model::class));
+        $model = $this->instance(
+            Model::class,
+            $this->createMock(Model::class)
+        );
 
         $data = [
-            'clientId' => 123123,
+            'userId' => 123123,
             'recordId' => 321321
         ];
 
