@@ -14,8 +14,7 @@
 */
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-        $router->group(['prefix' => 'v1'], function () use ($router) {
-
+    $router->group(['prefix' => 'v1'], function () use ($router) {
         // Order
         $router->group(['prefix' => 'order', 'namespace'], function () use ($router) {
             $router->get('', 'Api\V1\OrderController@list');
