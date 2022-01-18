@@ -14,6 +14,8 @@ services:
   nginx:
     container_name: nginx
     build: images/nginx
+    volumes:
+      - ./src/:/var/www/html
     command: nginx -g "daemon off;"
     links:
       - php
