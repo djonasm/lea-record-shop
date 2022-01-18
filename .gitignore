@@ -3,3 +3,5 @@ storage/*.key
 .env
 .phpunit.result.cache
 .idea/
+.bak
+.scribe
