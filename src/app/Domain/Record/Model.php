@@ -1,7 +1,5 @@
 <?php
 
-namespace LeaRecordShop\Order;
-
 use LeaRecordShop\BaseModel;
 
 class Model extends BaseModel
@@ -11,7 +9,7 @@ class Model extends BaseModel
      *
      * @var string
      */
-    protected $table = 'orders';
+    protected $table = 'records';
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +17,6 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'id', 'userId', 'recordId',
+        'id', 'genre', 'release_year', 'performer', 'name',
     ];
 }
