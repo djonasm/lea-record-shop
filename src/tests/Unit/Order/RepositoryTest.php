@@ -14,7 +14,7 @@ class RepositoryTest extends TestCase
         // Set
         $repository = new Repository();
 
-        // Avoid to use database
+        // Avoid hit database
         $model = $this->instance(
             Model::class,
             $this->createMock(Model::class)
@@ -51,7 +51,7 @@ class RepositoryTest extends TestCase
         // Set
         $repository = new Repository();
 
-        // Avoid to use database
+        // Avoid hit database
         $model = $this->instance(
             Model::class,
             $this->createMock(Model::class)

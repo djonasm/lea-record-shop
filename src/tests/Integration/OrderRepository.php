@@ -19,6 +19,7 @@ class OrderRepository extends IntegrationTestCase
         $this->put('api/v1/order/'.$order->id, ['userId' => $newClientId]);
         $result = Model::all()->first();
 
+        // Assertions
         $this->assertSame($newClientId, $result->userId);
     }
 
@@ -32,6 +33,7 @@ class OrderRepository extends IntegrationTestCase
         $this->delete('api/v1/order/'.$order->id);
         $result = Model::all()->count();
 
+        // Assertions
         $this->assertSame(0, $result);
     }
 }
