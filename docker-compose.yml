@@ -9,11 +9,13 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: root
+      MYSQL_DATABASE: lea-record-shop
 
   nginx:
     container_name: nginx
     build: images/nginx
+    volumes:
+      - ./src/:/var/www/html
     command: nginx -g "daemon off;"
     links:
       - php
@@ -26,7 +28,7 @@ services:
     container_name: php
     build: images/php
     volumes:
-      - ./lea-record-shop/:/var/www/html
+      - ./src/:/var/www/html
     command: php-fpm
     links:
       - db:db

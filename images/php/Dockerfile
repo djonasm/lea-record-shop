@@ -10,6 +10,8 @@ RUN apt-get update -qq \
     zlib1g-dev \
  && apt-get clean
 
+RUN docker-php-ext-install pdo_mysql
+
 RUN rm -rf /tmp/*
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
