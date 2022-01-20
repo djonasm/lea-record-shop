@@ -14,7 +14,12 @@ class OrderFactory extends Factory
      */
     protected $model = Record::class;
 
-    public function definition(): array
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
     {
         $fromPrice = $this->faker->randomFloat(2, 1, 1000);
 
@@ -24,10 +29,10 @@ class OrderFactory extends Factory
             'artist' => $this->faker->text(30),
             'name' => $this->faker->text(30),
             'label' => $this->faker->text(30),
-            'track_list' => $this->randomTracks(),
+            'trackList' => $this->randomTracks(),
             'description' => $this->faker->realText(),
-            'from_price' => $fromPrice,
-            'to_price' => min($fromPrice, $this->faker->randomFloat(2, 1, 1000)),
+            'fromPrice' => $fromPrice,
+            'toPrice' => min($fromPrice, $this->faker->randomFloat(2, 1, 1000)),
         ];
     }
 

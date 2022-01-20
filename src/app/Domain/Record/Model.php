@@ -21,13 +21,13 @@ class Model extends BaseModel
     protected $fillable = [
         'id',
         'genre',
-        'release_year',
+        'releaseYear',
         'artist',
         'name',
         'label',
-        'track_list',
+        'trackList',
         'description',
-        'from_price',
-        'to_price'
+        'fromPrice',
+        'toPrice'
     ];
 }

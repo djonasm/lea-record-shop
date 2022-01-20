@@ -16,7 +16,7 @@ class Service
         }
 
         if ($releaseYear) {
-            $query->where(['release_year' => $releaseYear]);
+            $query->where(compact('releaseYear'));
         }
 
         if ($artist) {
