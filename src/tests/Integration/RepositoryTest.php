@@ -8,7 +8,7 @@ use Tests\IntegrationTestCase;
 
 class RepositoryTest extends IntegrationTestCase
 {
-    public function testShouldUpdateOrder()
+    public function testShouldUpdateOrder(): void
     {
         // Set
         $factory = $this->app->make(OrderFactory::class);
@@ -23,7 +23,7 @@ class RepositoryTest extends IntegrationTestCase
         $this->assertSame($newClientId, $result->userId);
     }
 
-    public function testShouldDeleteOrder()
+    public function testShouldDeleteOrder(): void
     {
         // Set
         $factory = $this->app->make(OrderFactory::class);
