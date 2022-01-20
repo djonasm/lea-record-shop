@@ -1,5 +1,7 @@
 <?php
 
+namespace LeaRecordShop\Record;
+
 use LeaRecordShop\BaseModel;
 
 class Model extends BaseModel
@@ -17,6 +19,15 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'id', 'genre', 'release_year', 'performer', 'name',
+        'id',
+        'genre',
+        'release_year',
+        'artist',
+        'name',
+        'label',
+        'track_list',
+        'description',
+        'from_price',
+        'to_price'
     ];
 }

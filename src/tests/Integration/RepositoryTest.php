@@ -6,7 +6,7 @@ use Database\Factories\OrderFactory;
 use LeaRecordShop\Order\Model;
 use Tests\IntegrationTestCase;
 
-class OrderRepository extends IntegrationTestCase
+class RepositoryTest extends IntegrationTestCase
 {
     public function testShouldUpdateOrder()
     {
