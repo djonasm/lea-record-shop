@@ -1,6 +1,6 @@
 <?php
 
-namespace LeaRecordShop\Order;
+namespace LeaRecordShop\Record;
 
 use Illuminate\Database\Eloquent\Builder;
 use LeaRecordShop\BaseModel;
