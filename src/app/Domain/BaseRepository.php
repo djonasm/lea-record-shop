@@ -11,30 +11,42 @@ abstract class BaseRepository
 
     abstract protected function query(): Builder;
 
-    public function create(array $data): array
+    public function create(array $data): Response
     {
-        $entity = $this->entity();
+        $entity = $this->entity()->fill($data);
 
-        if (!$entity->fill($data)->save()) {
-            throw new InvalidArgumentException('Invalid order attributes.');
+        if (!$entity->validate()) {
+            return new Response(false, $entity->errors());
         }
 
-        return $entity->toArray();
+        if (!$entity->save()) {
+            return new Response(false);
+        }
+
+        return new Response(true, null, $entity->toArray());
     }
 
-    public function update(int $id, array $data): bool
+    public function update(int $id, array $data): Response
     {
-        return $this->query()
+        $model = $this->query()
             ->find($id)
-            ->fill($data)
-            ->update();
+            ->fill($data);
+
+        if (!$model->validate()) {
+            return new Response(false, $model->errors());
+        }
+
+        if (!$model->update()) {
+            return new Response(false);
+        }
+
+        return new Response(true);
     }
 
     public function delete(int $id): bool
     {
         return $this->query()
             ->find($id)
-            ->delete()
-            ->update();
+            ->delete();
     }
 }

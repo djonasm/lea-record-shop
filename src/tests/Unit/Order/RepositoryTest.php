@@ -3,6 +3,7 @@
 namespace Unit\Order;
 
 use Exception;
+use Illuminate\Support\MessageBag;
 use LeaRecordShop\Order\Model;
 use LeaRecordShop\Order\Repository;
 use Tests\TestCase;
@@ -32,6 +33,10 @@ class RepositoryTest extends TestCase
             ->willReturn($model);
 
         $model->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+
+        $model->expects($this->once())
             ->method('save')
             ->willReturn(true);
 
@@ -43,7 +48,7 @@ class RepositoryTest extends TestCase
         $result = $repository->create($data);
 
         // Assertions
-        $this->assertSame($data, $result);
+        $this->assertTrue($result->isSuccess());
     }
 
     public function testShouldThrowExceptionWhenSaveFailed(): void
@@ -62,6 +67,8 @@ class RepositoryTest extends TestCase
             'recordId' => 321321
         ];
 
+        $errors = new MessageBag(['Invalid user id.']);
+
         // Expectations
         $model->expects($this->once())
             ->method('fill')
@@ -69,12 +76,18 @@ class RepositoryTest extends TestCase
             ->willReturn($model);
 
         $model->expects($this->once())
-            ->method('save')
+            ->method('validate')
             ->willReturn(false);
 
-        $this->expectException(Exception::class);
+        $model->expects($this->once())
+            ->method('errors')
+            ->willReturn($errors);
 
         // Actions
-        $repository->create($data);
+        $result = $repository->create($data);
+
+        // Assertions
+        $this->assertFalse($result->isSuccess());
+        $this->assertSame('Invalid user id.', $result->errors()->first());
     }
 }

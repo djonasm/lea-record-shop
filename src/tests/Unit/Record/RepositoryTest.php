@@ -3,6 +3,7 @@
 namespace Unit\Record;
 
 use Exception;
+use Illuminate\Support\MessageBag;
 use LeaRecordShop\Record\Model;
 use LeaRecordShop\Record\Repository;
 use Tests\TestCase;
@@ -39,6 +40,10 @@ class RepositoryTest extends TestCase
             ->willReturn($model);
 
         $model->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+
+        $model->expects($this->once())
             ->method('save')
             ->willReturn(true);
 
@@ -50,7 +55,8 @@ class RepositoryTest extends TestCase
         $result = $repository->create($data);
 
         // Assertions
-        $this->assertSame($data, $result);
+        $this->assertTrue($result->isSuccess());
+        $this->assertSame($data, $result->data());
     }
 
     public function testShouldThrowExceptionWhenSaveFailed(): void
@@ -76,6 +82,8 @@ class RepositoryTest extends TestCase
             'toPrice' => 119.99,
         ];
 
+        $errors = new MessageBag(['Invalid record name.']);
+
         // Expectations
         $model->expects($this->once())
             ->method('fill')
@@ -83,12 +91,18 @@ class RepositoryTest extends TestCase
             ->willReturn($model);
 
         $model->expects($this->once())
-            ->method('save')
+            ->method('validate')
             ->willReturn(false);
 
-        $this->expectException(Exception::class);
+        $model->expects($this->once())
+            ->method('errors')
+            ->willReturn($errors);
 
         // Actions
-        $repository->create($data);
+        $result = $repository->create($data);
+
+        // Assertions
+        $this->assertFalse($result->isSuccess());
+        $this->assertSame('Invalid record name.', $result->errors()->first());
     }
 }

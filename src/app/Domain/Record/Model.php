@@ -30,4 +30,18 @@ class Model extends BaseModel
         'fromPrice',
         'toPrice'
     ];
+
+    protected $rules = [
+        'color' => 'required|alpha|min:3',
+        'size'  => 'required',
+        'genre' => 'required|string',
+        'releaseYear' => 'required|between:1800,2022',
+        'artist' => 'required|string',
+        'name' => 'required|string',
+        'label' => 'nullable|string',
+        'trackList' => 'nullable|json',
+        'description' => 'nullable|string',
+        'fromPrice' => 'nullable|numeric',
+        'toPrice' => 'required|numeric',
+    ];
 }
