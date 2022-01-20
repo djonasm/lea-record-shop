@@ -1,0 +1,66 @@
+name: Build and Push
+on: [push]
+jobs:
+  backend-tests:
+    name: Lea Record Tests
+    runs-on: ubuntu-latest
+    env:
+      DB_DATABASE: lea-record-shop
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      BROADCAST_DRIVER: log
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_USER: root
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_PASSWORD: root
+          MYSQL_DATABASE: lea-record-shop
+        ports:
+          - "3306:3306"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: mbstring, mysql
+
+      - name: Copy .env
+        working-directory: ./src
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Copy .env.testing
+        working-directory: ./src
+        run: php -r "copy('.env.github_actions', '.env.testing');"
+
+      - name: Install Dependencies
+        working-directory: ./src
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+
+      - name: Run Migration
+        working-directory: ./src
+        run: php artisan migrate -v
+        env:
+          DB_HOST: 127.0.0.1
+
+      - name: Execute tests
+        working-directory: ./src
+        run: vendor/bin/phpunit
+        env:
+          DB_HOST_A: localhost
+
+      - name: Execute phpcs
+        working-directory: ./src
+        run: vendor/bin/phpcs
+
+      - name: Run psalm
+        working-directory: ./src
+        run: vendor/bin/psalm
