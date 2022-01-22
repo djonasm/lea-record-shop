@@ -1,66 +1,61 @@
-name: Build and Push
+name: CI
 on: [push]
 jobs:
   backend-tests:
-    name: Lea Record Tests
+    name: Backend Tests (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
     env:
-      DB_DATABASE: lea-record-shop
+      DB_DATABASE: tests
+      DB_HOST: 127.0.0.1
       DB_USERNAME: root
       DB_PASSWORD: root
       BROADCAST_DRIVER: log
-
     services:
       mysql:
         image: mysql:latest
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_USER: root
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_PASSWORD: root
-          MYSQL_DATABASE: lea-record-shop
+          MYSQL_DATABASE: tests
         ports:
-          - "3306:3306"
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=3
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.0', '8.1']
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Start mysql service
+        run: sudo systemctl start mysql
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
-          extensions: mbstring, mysql
-
-      - name: Copy .env
-        working-directory: ./src
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Copy .env.testing
-        working-directory: ./src
-        run: php -r "copy('.env.github_actions', '.env.testing');"
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, dom, fileinfo, mysql
+          coverage: xdebug
 
       - name: Install Dependencies
         working-directory: ./src
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
 
+      - name: Prepare the application
+        working-directory: ./src
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
       - name: Run Migration
         working-directory: ./src
-        run: php artisan migrate -v
+        run: php artisan migrate
         env:
-          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
-      - name: Execute tests
+      - name: Test with phpunit
         working-directory: ./src
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --coverage-text
         env:
-          DB_HOST_A: localhost
-
-      - name: Execute phpcs
-        working-directory: ./src
-        run: vendor/bin/phpcs
-
-      - name: Run psalm
-        working-directory: ./src
-        run: vendor/bin/psalm
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
