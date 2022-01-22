@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Laravel\Lumen\Routing\Controller as BaseController;
+use App\Http\Controllers\Controller as BaseController;
 use LeaRecordShop\Order\Repository;
 use LeaRecordShop\Order\Service;
 use InvalidArgumentException;
@@ -38,7 +38,7 @@ class OrderController extends BaseController
      * This endpoint allows you to get orders.
      * It`s possible to use userId, startDate or endDate filter.
      *
-     * @urlParam userId integer The id of the client.
+     * @urlParam userId integer The id of the user.
      * @urlParam startDate The filter for minimum order created date. Example: 2020-08-15T15:52:01+00:00
      * @urlParam endDate The filter for maximum order created date. Example: 2021-08-15T15:52:01+00:00
      */
@@ -56,7 +56,7 @@ class OrderController extends BaseController
     /**
      * Create a order.
      *
-     * @bodyParam userId int required The id of the client. Example: 1
+     * @bodyParam userId int required The id of the user. Example: 1
      * @bodyParam recordId int required The id of the record. Example: 9
      *
      * @response scenario=success {
@@ -82,9 +82,6 @@ class OrderController extends BaseController
      * Delete a order.
      *
      * @urlParam id integer require The id of the order.
-     *
-     * @bodyParam userId int The id of the client. Example: 1
-     * @bodyParam recordId int The id of the record. Example: 9
      */
     public function delete(int $id): JsonResponse
     {
@@ -100,7 +97,7 @@ class OrderController extends BaseController
      *
      * @urlParam id integer require The id of the order.
      *
-     * @bodyParam userId int The id of the client. Example: 1
+     * @bodyParam userId int The id of the user. Example: 1
      * @bodyParam recordId int The id of the record. Example: 9
      */
     public function update(int $id, Request $request): JsonResponse

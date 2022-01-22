@@ -28,7 +28,8 @@ class Model extends BaseModel
         'trackList',
         'description',
         'fromPrice',
-        'toPrice'
+        'toPrice',
+        'stockQuantity',
     ];
 
     protected $rules = [
@@ -43,5 +44,6 @@ class Model extends BaseModel
         'description' => 'nullable|string',
         'fromPrice' => 'nullable|numeric',
         'toPrice' => 'required|numeric',
+        'stockQuantity' => 'required|integer',
     ];
 }
