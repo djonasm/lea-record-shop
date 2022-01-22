@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use LeaRecordShop\Record\Model as Record;
 
-class OrderFactory extends Factory
+class RecordFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -25,11 +25,11 @@ class OrderFactory extends Factory
 
         return [
             'genre' => $this->faker->randomElement(['rock', 'heavy metal', 'black metal', 'death metal']),
-            'release_year' => $this->faker->numberBetween(1950, 2022),
+            'releaseYear' => $this->faker->numberBetween(1950, 2022),
             'artist' => $this->faker->text(30),
             'name' => $this->faker->text(30),
             'label' => $this->faker->text(30),
-            'trackList' => $this->randomTracks(),
+            'trackList' => json_encode($this->randomTracks()),
             'description' => $this->faker->realText(),
             'fromPrice' => $fromPrice,
             'toPrice' => min($fromPrice, $this->faker->randomFloat(2, 1, 1000)),

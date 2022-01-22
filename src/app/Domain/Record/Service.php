@@ -6,7 +6,7 @@ class Service
 {
     public function list(
         ?string $genre = null,
-        ?string $releaseYear = null,
+        ?int $releaseYear = null,
         ?string $artist = null,
         ?string $name = null
     ): array {
