@@ -29,7 +29,6 @@ class Model extends BaseModel
         'description',
         'fromPrice',
         'toPrice',
-        'stockQuantity',
     ];
 
     protected $rules = [
@@ -44,6 +43,5 @@ class Model extends BaseModel
         'description' => 'nullable|string',
         'fromPrice' => 'nullable|numeric',
         'toPrice' => 'required|numeric',
-        'stockQuantity' => 'required|integer',
     ];
 }
