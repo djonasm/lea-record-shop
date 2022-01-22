@@ -86,7 +86,7 @@ class RecordController extends BaseController
      */
     public function create(Request $request): JsonResponse
     {
-        $data = $this->repository->create($request->only(
+        $response = $this->repository->create($request->only(
             'genre',
             'releaseYear',
             'artist',
@@ -99,7 +99,7 @@ class RecordController extends BaseController
             'stockQuantity',
         ));
 
-        return response()->json(['status' => 'success', 'data' => $data]);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -147,10 +147,6 @@ class RecordController extends BaseController
             'stockQuantity',
         ));
 
-        if (!$response->isSuccess()) {
-            return response()->json(['status' => 'failed', 422, 'errors' => $response->errors()]);
-        }
-
-        return response()->json(['status' => 'success', 'data' => $response->data()]);
+        return $this->handleResponse($response);
     }
 }
