@@ -134,7 +134,7 @@ class RecordController extends BaseController
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        if (!$this->repository->update($id, $request->only(
+        $response = $this->repository->update($id, $request->only(
             'genre',
             'releaseYear',
             'artist',
@@ -145,10 +145,12 @@ class RecordController extends BaseController
             'fromPrice',
             'toPrice',
             'stockQuantity',
-        ))) {
-            return response()->json(['status' => 'failed', 422]);
+        ));
+
+        if (!$response->isSuccess()) {
+            return response()->json(['status' => 'failed', 422, 'errors' => $response->errors()]);
         }
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'data' => $response->data()]);
     }
 }

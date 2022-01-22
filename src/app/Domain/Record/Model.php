@@ -32,10 +32,8 @@ class Model extends BaseModel
     ];
 
     protected $rules = [
-        'color' => 'required|alpha|min:3',
-        'size'  => 'required',
         'genre' => 'required|string',
-        'releaseYear' => 'required|between:1800,2022',
+        'releaseYear' => 'required|integer|between:1800,2022',
         'artist' => 'required|string',
         'name' => 'required|string',
         'label' => 'nullable|string',
