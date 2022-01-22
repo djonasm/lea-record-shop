@@ -86,7 +86,7 @@ class OrderController extends BaseController
     public function delete(int $id): JsonResponse
     {
         if (!$this->repository->delete($id)) {
-            return response()->json(['status' => 'failed', 422]);
+            return response()->json(['status' => 'failed'], 422);
         }
 
         return response()->json(['status' => 'success']);
