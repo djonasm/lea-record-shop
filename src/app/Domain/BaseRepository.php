@@ -28,15 +28,15 @@ abstract class BaseRepository
 
     public function update(int $id, array $data): Response
     {
-        $model = $this->query()
+        $entity = $this->query()
             ->find($id)
             ->fill($data);
 
-        if (!$model->validate()) {
-            return new Response(false, $model->errors());
+        if (!$entity->validate()) {
+            return new Response(false, $entity->errors());
         }
 
-        if (!$model->update()) {
+        if (!$entity->update()) {
             return new Response(false);
         }
 

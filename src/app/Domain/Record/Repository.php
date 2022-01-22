@@ -34,7 +34,32 @@ class Repository extends BaseRepository
                 return new Response(false);
             }
 
-            if (!$response = $this->stockRepository->create($data)) {
+            $response = $this->stockRepository->create($data);
+            if (!$response->isSuccess()) {
+                return $response;
+            }
+
+            return new Response(true, null, $entity->toArray());
+        });
+    }
+
+    public function update(int $id, array $data): Response
+    {
+        $entity = $this->query()
+            ->find($id)
+            ->fill($data);
+
+        if (!$entity->validate()) {
+            return new Response(false, $entity->errors());
+        }
+
+        return DB::transaction(function() use ($entity, $id, $data) {
+            if (!$entity->update()) {
+                return new Response(false);
+            }
+
+            $response = $this->stockRepository->update($id, $data);
+            if (!$response->isSuccess()) {
                 return $response;
             }
 

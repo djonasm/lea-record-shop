@@ -51,7 +51,7 @@ class RepositoryTest extends TestCase
         $this->assertTrue($result->isSuccess());
     }
 
-    public function testShouldThrowExceptionWhenSaveFailed(): void
+    public function testShouldResponseWithErrorsWhenCreateFailed(): void
     {
         // Set
         $repository = new Repository();
