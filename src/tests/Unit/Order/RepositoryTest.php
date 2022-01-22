@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Support\MessageBag;
 use LeaRecordShop\Order\Model;
 use LeaRecordShop\Order\Repository;
+use LeaRecordShop\Response;
+use LeaRecordShop\Stock\Service as StockService;
 use Tests\TestCase;
 
 class RepositoryTest extends TestCase
@@ -13,7 +15,8 @@ class RepositoryTest extends TestCase
     public function testShouldCreateOrderWithSuccess(): void
     {
         // Set
-        $repository = new Repository();
+        $stockService =  $this->createMock(StockService::class);
+        $repository = new Repository($stockService);
 
         // Avoid hit database
         $model = $this->instance(
@@ -21,9 +24,12 @@ class RepositoryTest extends TestCase
             $this->createMock(Model::class)
         );
 
+        $recordId = 321321;
+        $model->recordId = $recordId;
+
         $data = [
             'userId' => 123123,
-            'recordId' => 321321
+            'recordId' => $recordId
         ];
 
         // Expectations
@@ -40,6 +46,11 @@ class RepositoryTest extends TestCase
             ->method('save')
             ->willReturn(true);
 
+        $stockService->expects($this->once())
+            ->method('decreaseQuantity')
+            ->with($recordId)
+            ->willReturn(new Response(true));
+
         $model->expects($this->once())
             ->method('toArray')
             ->willReturn($data);
@@ -54,7 +65,8 @@ class RepositoryTest extends TestCase
     public function testShouldResponseWithErrorsWhenCreateFailed(): void
     {
         // Set
-        $repository = new Repository();
+        $stockService =  $this->createMock(StockService::class);
+        $repository = new Repository($stockService);
 
         // Avoid hit database
         $model = $this->instance(

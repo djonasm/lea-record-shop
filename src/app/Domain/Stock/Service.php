@@ -9,10 +9,8 @@ class Service
 {
     public function decreaseQuantity(int $recordId): Response
     {
-        $entity = $this->query()
-            ->find(compact('recordId'));
-
-        if ($entity->stockQuantity < 1) {
+        $entity = Model::where(compact('recordId'))->first();
+        if (!$entity || $entity->stockQuantity < 1) {
             $errors = new MessageBag(['Insufficient stock quantity.']);
 
             return new Response(false, $errors);

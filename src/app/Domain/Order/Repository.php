@@ -44,7 +44,7 @@ class Repository extends BaseRepository
                 return new Response(false);
             }
 
-            $response = $this->stockService->decreaseQuantity($entity->recordId);
+            $response = $this->stockService->decreaseQuantity($data['recordId']);
             if (!$response->isSuccess()) {
                 return $response;
             }

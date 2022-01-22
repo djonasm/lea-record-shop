@@ -69,13 +69,11 @@ class OrderController extends BaseController
      */
     public function create(Request $request): JsonResponse
     {
-        try {
-            $data = $this->repository->create($request->only('userId', 'recordId'));
-        } catch (InvalidArgumentException $exception) {
-            return response()->json(['status' => 'failed', 'message' => 'Invalid input'], 422);
-        }
+        $response = $this->repository->create(
+            $request->only('userId', 'recordId')
+        );
 
-        return response()->json(['status' => 'success', 'data' => $data]);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -102,10 +100,11 @@ class OrderController extends BaseController
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        if (!$this->repository->update($id, $request->only('userId', 'recordId'))) {
-            return response()->json(['status' => 'failed', 422]);
-        }
+        $response = $this->repository->update(
+            $id,
+            $request->only('userId', 'recordId')
+        );
 
-        return response()->json(['status' => 'success']);
+        return $this->handleResponse($response);
     }
 }
