@@ -15,8 +15,11 @@ class RepositoryTest extends IntegrationTestCase
     public function testShouldUpdateOrder(): void
     {
         // Set
-        $factory = $this->app->make(OrderFactory::class);
-        $order = $factory->create(['userId' => 1]);
+        $orderFactory = $this->app->make(OrderFactory::class);
+        $recordFactory = $this->app->make(RecordFactory::class);
+
+        $record = $recordFactory->create();
+        $order = $orderFactory->create(['userId' => 1, 'recordId' => $record]);
         $newClientId = 2;
 
         // Actions
@@ -31,9 +34,9 @@ class RepositoryTest extends IntegrationTestCase
     {
         // Set
         $recordFactory = $this->app->make(RecordFactory::class);
-        $record = $recordFactory->create(['genre' => 'vocal']);
-
         $stockFactory = $this->app->make(StockFactory::class);
+
+        $record = $recordFactory->create(['genre' => 'vocal']);
         $stockFactory->create(['recordId' => $record->id]);
 
         // Actions
@@ -49,8 +52,11 @@ class RepositoryTest extends IntegrationTestCase
     public function testShouldDeleteOrder(): void
     {
         // Set
-        $factory = $this->app->make(OrderFactory::class);
-        $order = $factory->create();
+        $orderFactory = $this->app->make(OrderFactory::class);
+        $recordFactory = $this->app->make(RecordFactory::class);
+
+        $record = $recordFactory->create();
+        $order = $orderFactory->create(['userId' => 1, 'recordId' => $record]);
 
         // Actions
         $this->delete('api/v1/order/'.$order->id);
