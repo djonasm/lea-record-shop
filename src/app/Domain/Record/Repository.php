@@ -55,6 +55,26 @@ class Repository extends BaseRepository
             return new Response(false, $entity->errors());
         }
 
+        // Simplify update when stock will not update
+        if (!$data['stockQuantity']) {
+            parent::update($id, $data);
+        }
+
+        return $this->updateRecordAndStock($entity, $id, $data);
+    }
+
+    protected function entity(): BaseModel
+    {
+        return app(Model::class);
+    }
+
+    protected function query(): Builder
+    {
+        return Model::query();
+    }
+
+    private function updateRecordAndStock($entity, int $id, array $data): Response
+    {
         return DB::transaction(
             function () use ($entity, $id, $data) {
                 if (!$entity->update()) {
@@ -69,15 +89,5 @@ class Repository extends BaseRepository
                 return new Response(true, null, $entity->toArray());
             }
         );
-    }
-
-    protected function entity(): BaseModel
-    {
-        return app(Model::class);
-    }
-
-    protected function query(): Builder
-    {
-        return Model::query();
     }
 }

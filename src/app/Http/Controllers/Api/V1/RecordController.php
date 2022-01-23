@@ -123,16 +123,16 @@ class RecordController extends BaseController
      *
      * @urlParam id integer require The id of the record.
      *
-     * @bodyParam genre required The genre of the record. Example: vocal
-     * @bodyParam releaseYear int required The release year of the record. Example: 2019
-     * @bodyParam artist required The artist of the record. Example: Adele
-     * @bodyParam name required The name of the record. Example: Adele Live at the Royal Albert Hall
+     * @bodyParam genre The genre of the record. Example: vocal
+     * @bodyParam releaseYear int The release year of the record. Example: 2019
+     * @bodyParam artist The artist of the record. Example: Adele
+     * @bodyParam name The name of the record. Example: Adele Live at the Royal Albert Hall
      * @bodyParam label The label of the record. Example: Columbia Sony
      * @bodyParam trackList string[] The track list of the record. Example: ["1 - Hometown Glory", "2 - "I'll Be Waiting"]
      * @bodyParam description The description of the record. Example: Adele Live at the Royal Albert Hall
-     * @bodyParam fromPrice number required The from price of the record. Example: 120.01
-     * @bodyParam toPrice number required The to price of the record. Example: 99.99
-     * @bodyParam stockQuantity int required The stock quantity of the record. Example: 200
+     * @bodyParam fromPrice number The from price of the record. Example: 120.01
+     * @bodyParam toPrice number The to price of the record. Example: 99.99
+     * @bodyParam stockQuantity int The stock quantity of the record. Example: 200
      */
     public function update(int $id, Request $request): JsonResponse
     {
