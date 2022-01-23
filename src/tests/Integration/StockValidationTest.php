@@ -5,6 +5,7 @@ namespace Integration;
 use Database\Factories\OrderFactory;
 use Database\Factories\RecordFactory;
 use Database\Factories\StockFactory;
+use Database\Factories\UserFactory;
 use LeaRecordShop\Stock\Model;
 use Tests\IntegrationTestCase;
 
@@ -16,10 +17,19 @@ class StockValidationTest extends IntegrationTestCase
         $orderFactory = $this->app->make(OrderFactory::class);
         $recordFactory = $this->app->make(RecordFactory::class);
         $stockFactory = $this->app->make(StockFactory::class);
+        $userFactory = $this->app->make(UserFactory::class);
 
         $record = $recordFactory->create();
-        $stockFactory->create(['id' => 1, 'recordId' => $record->id, 'stockQuantity' => 1]);
-        $order = $orderFactory->make(['userId' => 1, 'recordId' => $record->id]);
+        $user = $userFactory->create();
+        $stockFactory->create([
+            'id' => 1,
+            'recordId' => $record->id,
+            'stockQuantity' => 1
+        ]);
+        $order = $orderFactory->make([
+            'userId' => $user->id,
+            'recordId' => $record->id
+        ]);
 
         // Actions
         $this->post('api/v1/order/', $order->attributesToArray());
@@ -35,12 +45,14 @@ class StockValidationTest extends IntegrationTestCase
         $orderFactory = $this->app->make(OrderFactory::class);
         $recordFactory = $this->app->make(RecordFactory::class);
         $stockFactory = $this->app->make(StockFactory::class);
+        $userFactory = $this->app->make(UserFactory::class);
 
         $record = $recordFactory->create();
+        $user = $userFactory->create();
         $order = $orderFactory->make(['userId' => 1, 'recordId' => $record->id]);
 
         // Create Stock with zero quantity
-        $stockFactory->create(['id' => 1, 'recordId' => $record->id, 'stockQuantity' => 0]);
+        $stockFactory->create(['id' => $user->id, 'recordId' => $record->id, 'stockQuantity' => 0]);
 
         // Actions
         $this->post('api/v1/order/', $order->attributesToArray());
