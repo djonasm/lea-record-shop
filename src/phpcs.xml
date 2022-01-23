@@ -6,10 +6,8 @@
     <arg name="cache" value=".phpcs-cache"/>
     <arg name="colors"/>
 
-    <!-- Show progress of the run -->
     <arg value="nps"/>
 
-    <!-- Folders that will be track -->
     <file>app</file>
     <file>bootstrap/app.php</file>
     <file>config</file>
@@ -21,12 +19,10 @@
         <exclude-pattern>resources/views/*</exclude-pattern>
     </rule>
 
-    <!-- Route files can have file-level docblock anywhere, not only after opening PHP tag -->
     <rule ref="PSR12.Files.FileHeader.IncorrectOrder">
         <exclude-pattern>routes</exclude-pattern>
     </rule>
 
-    <!-- Migrations don't have namespaces -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <exclude-pattern>database/migrations</exclude-pattern>
     </rule>

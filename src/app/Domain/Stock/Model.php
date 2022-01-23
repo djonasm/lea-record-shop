@@ -23,7 +23,7 @@ class Model extends BaseModel
     ];
 
     protected $rules = [
-        'recordId' => 'required|integer',
+        'recordId' => 'required|exists:LeaRecordShop\Record\Model,id',
         'stockQuantity' => 'required|integer',
     ];
 }
