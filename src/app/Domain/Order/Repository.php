@@ -2,38 +2,56 @@
 
 namespace LeaRecordShop\Order;
 
-use InvalidArgumentException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use LeaRecordShop\BaseModel;
+use LeaRecordShop\BaseRepository;
+use LeaRecordShop\Response;
+use LeaRecordShop\Stock\Service as StockService;
 
-class Repository
+class Repository extends BaseRepository
 {
-    public function create(array $data): array
+    /**
+     * @var StockService
+     */
+    private $stockService;
+
+    public function __construct(StockService $stockService)
     {
-        $entity = $this->getEntity();
-
-        if (!$entity->fill($data)->save()) {
-            throw new InvalidArgumentException('Invalid order attributes.');
-        }
-
-        return $entity->toArray();
+        $this->stockService = $stockService;
     }
 
-    public function update(int $id, array $data): bool
-    {
-        return Model::find($id)
-            ->fill($data)
-            ->update();
-    }
-
-    public function delete(int $id): bool
-    {
-        return Model::find($id)
-            ->find($id)
-            ->delete()
-            ->update();
-    }
-
-    private function getEntity(): Model
+    protected function entity(): BaseModel
     {
         return app(Model::class);
+    }
+
+    protected function query(): Builder
+    {
+        return Model::query();
+    }
+
+    public function create(array $data): Response
+    {
+        $entity = $this->entity()->fill($data);
+
+        if (!$entity->validate()) {
+            return new Response(false, $entity->errors());
+        }
+
+        return DB::transaction(
+            function () use ($entity, $data) {
+                if (!$entity->save()) {
+                    return new Response(false);
+                }
+
+                $response = $this->stockService->decreaseQuantity($data['recordId']);
+                if (!$response->isSuccess()) {
+                    return $response;
+                }
+
+                return new Response(true, null, $entity->toArray());
+            }
+        );
     }
 }

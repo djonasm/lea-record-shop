@@ -1,22 +1,22 @@
 <?php
 
-namespace Unit\Order;
+namespace Unit\Record;
 
 use Exception;
 use Illuminate\Support\MessageBag;
-use LeaRecordShop\Order\Model;
-use LeaRecordShop\Order\Repository;
+use LeaRecordShop\Record\Model;
+use LeaRecordShop\Record\Repository;
 use LeaRecordShop\Response;
-use LeaRecordShop\Stock\Service as StockService;
+use LeaRecordShop\Stock\Repository as StockRepository;
 use Tests\TestCase;
 
 class RepositoryTest extends TestCase
 {
-    public function testShouldCreateOrderWithSuccess(): void
+    public function testShouldCreateRecordWithSuccess(): void
     {
         // Set
-        $stockService =  $this->createMock(StockService::class);
-        $repository = new Repository($stockService);
+        $stockRepository = $this->createMock(StockRepository::class);
+        $repository = new Repository($stockRepository);
 
         // Avoid hit database
         $model = $this->instance(
@@ -24,12 +24,17 @@ class RepositoryTest extends TestCase
             $this->createMock(Model::class)
         );
 
-        $recordId = 321321;
-        $model->recordId = $recordId;
-
         $data = [
-            'userId' => 123123,
-            'recordId' => $recordId
+            'genre' => 'vocal',
+            'releaseYear' => 2019,
+            'artist' => 'Junior Carelli',
+            'name' => 'Temple of Shadows',
+            'label' => 'Angra Records',
+            'trackList' => json_encode(['Nova Era', 'Cavaleiro dos Zodíacos']),
+            'description' => 'Best Album ever made',
+            'fromPrice' => 180.00,
+            'toPrice' => 119.99,
+            'stockQuantity' => 99,
         ];
 
         // Expectations
@@ -46,27 +51,27 @@ class RepositoryTest extends TestCase
             ->method('save')
             ->willReturn(true);
 
-        $stockService->expects($this->once())
-            ->method('decreaseQuantity')
-            ->with($recordId)
-            ->willReturn(new Response(true));
-
         $model->expects($this->once())
             ->method('toArray')
             ->willReturn($data);
+
+        $stockRepository->expects($this->once())
+            ->method('create')
+            ->willReturn(new Response(true));
 
         // Actions
         $result = $repository->create($data);
 
         // Assertions
         $this->assertTrue($result->isSuccess());
+        $this->assertSame($data, $result->data());
     }
 
     public function testShouldResponseWithErrorsWhenCreateFailed(): void
     {
         // Set
-        $stockService =  $this->createMock(StockService::class);
-        $repository = new Repository($stockService);
+        $stockRepository = $this->createMock(StockRepository::class);
+        $repository = new Repository($stockRepository);
 
         // Avoid hit database
         $model = $this->instance(
@@ -75,11 +80,18 @@ class RepositoryTest extends TestCase
         );
 
         $data = [
-            'userId' => 123123,
-            'recordId' => 321321
+            'genre' => 'vocal',
+            'releaseYear' => 2019,
+            'artist' => 'Junior Carelli',
+            'name' => 'Temple of Shadows',
+            'label' => 'Angra Records',
+            'trackList' => json_encode(['Nova Era', 'Cavaleiro dos Zodíacos']),
+            'description' => 'Best Album ever made',
+            'fromPrice' => 180.00,
+            'toPrice' => 119.99,
         ];
 
-        $errors = new MessageBag(['Invalid user id.']);
+        $errors = new MessageBag(['Invalid record name.']);
 
         // Expectations
         $model->expects($this->once())
@@ -100,6 +112,6 @@ class RepositoryTest extends TestCase
 
         // Assertions
         $this->assertFalse($result->isSuccess());
-        $this->assertSame('Invalid user id.', $result->errors()->first());
+        $this->assertSame('Invalid record name.', $result->errors()->first());
     }
 }

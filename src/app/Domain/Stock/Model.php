@@ -1,6 +1,6 @@
 <?php
 
-namespace LeaRecordShop\Order;
+namespace LeaRecordShop\Stock;
 
 use LeaRecordShop\BaseModel;
 
@@ -11,7 +11,7 @@ class Model extends BaseModel
      *
      * @var string
      */
-    protected $table = 'orders';
+    protected $table = 'stocks';
 
     /**
      * The attributes that are mass assignable.
@@ -19,13 +19,11 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'id',
-        'userId',
-        'recordId',
+        'id', 'recordId', 'stockQuantity',
     ];
 
     protected $rules = [
-        'userId' => 'required|integer',
         'recordId' => 'required|exists:LeaRecordShop\Record\Model,id',
+        'stockQuantity' => 'required|integer',
     ];
 }
