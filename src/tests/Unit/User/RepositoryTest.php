@@ -1,21 +1,18 @@
 <?php
 
-namespace Unit\Order;
+namespace Unit\User;
 
 use Illuminate\Support\MessageBag;
-use LeaRecordShop\Order\Model;
-use LeaRecordShop\Order\Repository;
-use LeaRecordShop\Response;
-use LeaRecordShop\Stock\Service as StockService;
+use LeaRecordShop\User\Model;
+use LeaRecordShop\User\Repository;
 use Tests\TestCase;
 
 class RepositoryTest extends TestCase
 {
-    public function testShouldCreateOrderWithSuccess(): void
+    public function testShouldCreateUserWithSuccess(): void
     {
         // Set
-        $stockService =  $this->createMock(StockService::class);
-        $repository = new Repository($stockService);
+        $repository = new Repository();
 
         // Avoid hit database
         $model = $this->instance(
@@ -27,8 +24,10 @@ class RepositoryTest extends TestCase
         $model->recordId = $recordId;
 
         $data = [
-            'userId' => 123123,
-            'recordId' => $recordId
+            'name' => 'John Days',
+            'email' => 'johndays@johndays.com',
+            'gender' => 'other',
+            'address' => 'Rua Joao Dias',
         ];
 
         // Expectations
@@ -45,11 +44,6 @@ class RepositoryTest extends TestCase
             ->method('save')
             ->willReturn(true);
 
-        $stockService->expects($this->once())
-            ->method('decreaseQuantity')
-            ->with($recordId)
-            ->willReturn(new Response(true));
-
         $model->expects($this->once())
             ->method('toArray')
             ->willReturn($data);
@@ -64,8 +58,7 @@ class RepositoryTest extends TestCase
     public function testShouldResponseWithErrorsWhenCreateFailed(): void
     {
         // Set
-        $stockService =  $this->createMock(StockService::class);
-        $repository = new Repository($stockService);
+        $repository = new Repository();
 
         // Avoid hit database
         $model = $this->instance(
@@ -74,11 +67,13 @@ class RepositoryTest extends TestCase
         );
 
         $data = [
-            'userId' => 123123,
-            'recordId' => 321321
+            'name' => 'John Days',
+            'email' => 'johndays@johndays.com',
+            'gender' => 'other',
+            'address' => 123,
         ];
 
-        $errors = new MessageBag(['Invalid user id.']);
+        $errors = new MessageBag(['Invalid address parameter.']);
 
         // Expectations
         $model->expects($this->once())
@@ -99,6 +94,6 @@ class RepositoryTest extends TestCase
 
         // Assertions
         $this->assertFalse($result->isSuccess());
-        $this->assertSame('Invalid user id.', $result->errors()->first());
+        $this->assertSame('Invalid address parameter.', $result->errors()->first());
     }
 }

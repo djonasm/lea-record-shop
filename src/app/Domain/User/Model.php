@@ -25,7 +25,7 @@ class Model extends BaseModel
         'name',
         'email',
         'fiscalId',
-        'birthDate',
+        'birthdate',
         'gender',
         'phone',
         'address',
@@ -38,9 +38,9 @@ class Model extends BaseModel
 
     protected $rules = [
         'name' => 'required|string',
-        'email' => 'required|email',
-        'fiscalId' => 'required|string',
-        'birthDate' => 'required|date',
+        'email' => 'required|unique|email',
+        'fiscalId' => 'required|unique|string',
+        'birthdate' => 'required|date',
         'gender' => 'nullable|in:male,female,non-binary,genderqueer,agender,bigender,other',
         'phone' => 'nullable|string|between:10,11',
         'address' => 'nullable|string',

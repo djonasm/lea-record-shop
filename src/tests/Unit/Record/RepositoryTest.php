@@ -2,7 +2,6 @@
 
 namespace Unit\Record;
 
-use Exception;
 use Illuminate\Support\MessageBag;
 use LeaRecordShop\Record\Model;
 use LeaRecordShop\Record\Repository;

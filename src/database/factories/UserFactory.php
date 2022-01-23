@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'name' => $this->faker->text(30),
             'email' => $this->faker->freeEmail(),
             'fiscalId' => $this->faker->text(14),
-            'birthDate' => $this->faker->dateTimeBetween('-90 years'),
+            'birthdate' => $this->faker->dateTimeBetween('-90 years'),
             'gender' => $this->faker->randomElement(['male','female','non-binary','genderqueer','agender','bigender','other']),
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),

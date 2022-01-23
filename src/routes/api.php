@@ -29,5 +29,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->delete('{id}', 'Api\V1\RecordController@delete');
             $router->put('{id}', 'Api\V1\RecordController@update');
         });
+        // User
+        $router->group(['prefix' => 'record', 'namespace'], function () use ($router) {
+            $router->get('', 'Api\V1\UserController@list');
+            $router->post('', 'Api\V1\UserController@create');
+            $router->delete('{id}', 'Api\V1\UserController@delete');
+            $router->put('{id}', 'Api\V1\UserController@update');
+        });
     });
 });

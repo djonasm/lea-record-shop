@@ -24,7 +24,7 @@ class Model extends BaseModel
     ];
 
     protected $rules = [
-        'userId' => 'required|integer',
+        'userId' => 'required|exists:LeaRecordShop\User\Model,id',
         'recordId' => 'required|exists:LeaRecordShop\Record\Model,id',
     ];
 }
