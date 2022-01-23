@@ -60,4 +60,69 @@ class StockValidationTest extends IntegrationTestCase
         // Assertions
         $this->assertResponseStatus(422);
     }
+
+    public function testShouldReleaseStockWhenOrderWasDeleted(): void
+    {
+        // Set
+        $orderFactory = $this->app->make(OrderFactory::class);
+        $recordFactory = $this->app->make(RecordFactory::class);
+        $stockFactory = $this->app->make(StockFactory::class);
+        $userFactory = $this->app->make(UserFactory::class);
+
+        $record = $recordFactory->create();
+        $user = $userFactory->create();
+        $stockFactory->create([
+            'id' => 1,
+            'recordId' => $record->id,
+            'stockQuantity' => 1
+        ]);
+        $order = $orderFactory->create([
+            'userId' => $user->id,
+            'recordId' => $record->id
+        ]);
+
+        // Actions
+        $this->delete('api/v1/order/'.$order->id);
+        $stock = Model::find(1);
+
+        // Assertions
+        $this->assertSame(2, $stock->stockQuantity);
+    }
+
+    public function testShouldReleaseStockWhenOrderWasUpdated(): void
+    {
+        // Set
+        $orderFactory = $this->app->make(OrderFactory::class);
+        $recordFactory = $this->app->make(RecordFactory::class);
+        $stockFactory = $this->app->make(StockFactory::class);
+        $userFactory = $this->app->make(UserFactory::class);
+
+        $record = $recordFactory->create();
+        $newRecord = $recordFactory->create();
+        $user = $userFactory->create();
+
+        $stockFactory->create([
+            'id' => 1,
+            'recordId' => $record->id,
+            'stockQuantity' => 1
+        ]);
+        $stockFactory->create([
+            'id' => 2,
+            'recordId' => $newRecord->id,
+            'stockQuantity' => 1
+        ]);
+        $order = $orderFactory->create([
+            'userId' => $user->id,
+            'recordId' => $record->id
+        ]);
+
+        // Actions
+        $this->put('api/v1/order/'.$order->id, ['recordId' => $newRecord->id]);
+        $recordStock = Model::find(1);
+        $newRecordStock = Model::find(2);
+
+        // Assertions
+        $this->assertSame(2, $recordStock->stockQuantity);
+        $this->assertSame(0, $newRecordStock->stockQuantity);
+    }
 }

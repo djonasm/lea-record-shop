@@ -57,9 +57,11 @@ class RepositoryTest extends IntegrationTestCase
         // Set
         $orderFactory = $this->app->make(OrderFactory::class);
         $recordFactory = $this->app->make(RecordFactory::class);
+        $stockFactory = $this->app->make(StockFactory::class);
 
         $record = $recordFactory->create();
         $order = $orderFactory->create(['userId' => 1, 'recordId' => $record]);
+        $stockFactory->create(['stockQuantity' => 1, 'recordId' => $record]);
 
         // Actions
         $this->delete('api/v1/order/'.$order->id);

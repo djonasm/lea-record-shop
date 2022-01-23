@@ -7,7 +7,7 @@ use LeaRecordShop\Response;
 
 class Service
 {
-    public function decreaseQuantity(int $recordId): Response
+    public function decrementQuantity(int $recordId): Response
     {
         $entity = Model::where(compact('recordId'))->first();
         if (!$entity || $entity->stockQuantity < 1) {
@@ -17,6 +17,15 @@ class Service
         }
 
         $isSuccess = $entity->decrement('stockQuantity');
+
+        return new Response($isSuccess);
+    }
+
+    public function incrementQuantity(int $recordId): Response
+    {
+        $entity = Model::where(compact('recordId'))->first();
+
+        $isSuccess = $entity->increment('stockQuantity');
 
         return new Response($isSuccess);
     }

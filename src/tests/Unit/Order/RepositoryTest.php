@@ -46,7 +46,7 @@ class RepositoryTest extends TestCase
             ->willReturn(true);
 
         $stockService->expects($this->once())
-            ->method('decreaseQuantity')
+            ->method('decrementQuantity')
             ->with($recordId)
             ->willReturn(new Response(true));
 
