@@ -58,4 +58,11 @@ jobs:
         run: vendor/bin/phpunit --coverage-text
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+
+      - name: Execute phpcs
+        working-directory: ./src
+        run: vendor/bin/phpcs
+
+      - name: Run psalm
+        working-directory: ./src
+        run: vendor/bin/psalm

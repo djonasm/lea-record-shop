@@ -29,18 +29,20 @@ class Repository extends BaseRepository
             return new Response(false, $entity->errors());
         }
 
-        return DB::transaction(function() use ($entity, $data) {
-            if (!$entity->save()) {
-                return new Response(false);
-            }
+        return DB::transaction(
+            function () use ($entity, $data) {
+                if (!$entity->save()) {
+                    return new Response(false);
+                }
 
-            $response = $this->stockRepository->create($data);
-            if (!$response->isSuccess()) {
-                return $response;
-            }
+                $response = $this->stockRepository->create($data);
+                if (!$response->isSuccess()) {
+                    return $response;
+                }
 
-            return new Response(true, null, $entity->toArray());
-        });
+                return new Response(true, null, $entity->toArray());
+            }
+        );
     }
 
     public function update(int $id, array $data): Response
@@ -53,18 +55,20 @@ class Repository extends BaseRepository
             return new Response(false, $entity->errors());
         }
 
-        return DB::transaction(function() use ($entity, $id, $data) {
-            if (!$entity->update()) {
-                return new Response(false);
-            }
+        return DB::transaction(
+            function () use ($entity, $id, $data) {
+                if (!$entity->update()) {
+                    return new Response(false);
+                }
 
-            $response = $this->stockRepository->update($id, $data);
-            if (!$response->isSuccess()) {
-                return $response;
-            }
+                $response = $this->stockRepository->update($id, $data);
+                if (!$response->isSuccess()) {
+                    return $response;
+                }
 
-            return new Response(true, null, $entity->toArray());
-        });
+                return new Response(true, null, $entity->toArray());
+            }
+        );
     }
 
     protected function entity(): BaseModel

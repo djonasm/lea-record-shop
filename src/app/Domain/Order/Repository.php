@@ -39,17 +39,19 @@ class Repository extends BaseRepository
             return new Response(false, $entity->errors());
         }
 
-        return DB::transaction(function() use ($entity, $data) {
-            if (!$entity->save()) {
-                return new Response(false);
-            }
+        return DB::transaction(
+            function () use ($entity, $data) {
+                if (!$entity->save()) {
+                    return new Response(false);
+                }
 
-            $response = $this->stockService->decreaseQuantity($data['recordId']);
-            if (!$response->isSuccess()) {
-                return $response;
-            }
+                $response = $this->stockService->decreaseQuantity($data['recordId']);
+                if (!$response->isSuccess()) {
+                    return $response;
+                }
 
-            return new Response(true, null, $entity->toArray());
-        });
+                return new Response(true, null, $entity->toArray());
+            }
+        );
     }
 }

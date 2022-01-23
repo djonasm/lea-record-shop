@@ -86,18 +86,20 @@ class RecordController extends BaseController
      */
     public function create(Request $request): JsonResponse
     {
-        $response = $this->repository->create($request->only(
-            'genre',
-            'releaseYear',
-            'artist',
-            'name',
-            'label',
-            'trackList',
-            'description',
-            'fromPrice',
-            'toPrice',
-            'stockQuantity',
-        ));
+        $response = $this->repository->create(
+            $request->only(
+                'genre',
+                'releaseYear',
+                'artist',
+                'name',
+                'label',
+                'trackList',
+                'description',
+                'fromPrice',
+                'toPrice',
+                'stockQuantity',
+            )
+        );
 
         return $this->handleResponse($response);
     }
@@ -134,18 +136,20 @@ class RecordController extends BaseController
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        $response = $this->repository->update($id, $request->only(
-            'genre',
-            'releaseYear',
-            'artist',
-            'name',
-            'label',
-            'trackList',
-            'description',
-            'fromPrice',
-            'toPrice',
-            'stockQuantity',
-        ));
+        $response = $this->repository->update(
+            $id, $request->only(
+                'genre',
+                'releaseYear',
+                'artist',
+                'name',
+                'label',
+                'trackList',
+                'description',
+                'fromPrice',
+                'toPrice',
+                'stockQuantity',
+            )
+        );
 
         return $this->handleResponse($response);
     }

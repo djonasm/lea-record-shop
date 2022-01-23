@@ -43,7 +43,7 @@ abstract class BaseRepository
         return new Response(true);
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id): ?bool
     {
         return $this->query()
             ->find($id)
