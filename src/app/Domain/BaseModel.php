@@ -9,7 +9,10 @@ use Illuminate\Support\MessageBag;
 class BaseModel extends EloquentModel
 {
     const CREATED_AT = 'createdAt';
+
     const UPDATED_AT = 'updatedAt';
+
+    const DELETED_AT = 'deletedAt';
 
     /**
      * @var array

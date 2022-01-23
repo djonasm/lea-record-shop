@@ -19,7 +19,7 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'id', 'recordId', 'stockQuantity',
+        'recordId', 'stockQuantity',
     ];
 
     protected $rules = [

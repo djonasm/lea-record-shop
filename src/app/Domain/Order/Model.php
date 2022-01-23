@@ -19,7 +19,6 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'id',
         'userId',
         'recordId',
     ];
