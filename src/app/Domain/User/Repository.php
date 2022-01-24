@@ -17,4 +17,9 @@ class Repository extends BaseRepository
     {
         return Model::query();
     }
+
+    public function list(): array
+    {
+        return Model::all()->toArray();
+    }
 }

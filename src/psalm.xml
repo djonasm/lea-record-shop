@@ -10,7 +10,6 @@
         <directory name="app" />
         <directory name="app/Domain" />
         <directory name="database/factories" />
-        <directory name="database/seeders" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
