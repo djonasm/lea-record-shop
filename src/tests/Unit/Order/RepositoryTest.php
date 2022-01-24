@@ -6,6 +6,7 @@ use Illuminate\Support\MessageBag;
 use LeaRecordShop\Order\Identifier;
 use LeaRecordShop\Order\Model;
 use LeaRecordShop\Order\Repository;
+use LeaRecordShop\Record\Service as RecordService;
 use LeaRecordShop\Response;
 use LeaRecordShop\Stock\Service as StockService;
 use Tests\TestCase;
@@ -17,7 +18,8 @@ class RepositoryTest extends TestCase
         // Set
         $stockService =  $this->createMock(StockService::class);
         $identifier =  $this->createMock(Identifier::class);
-        $repository = new Repository($stockService, $identifier);
+        $recordService =  $this->createMock(RecordService::class);
+        $repository = new Repository($stockService, $recordService, $identifier);
 
         // Avoid hit database
         $model = $this->instance(
@@ -63,6 +65,11 @@ class RepositoryTest extends TestCase
             ->with($recordId, $orderId)
             ->willReturn(new Response(true));
 
+        $recordService->expects($this->once())
+            ->method('isAvailable')
+            ->with(321321)
+            ->willReturn(new Response(true));
+
         $model->expects($this->once())
             ->method('toArray')
             ->willReturn($data);
@@ -79,7 +86,8 @@ class RepositoryTest extends TestCase
         // Set
         $stockService =  $this->createMock(StockService::class);
         $identifier =  $this->createMock(Identifier::class);
-        $repository = new Repository($stockService, $identifier);
+        $recordService =  $this->createMock(RecordService::class);
+        $repository = new Repository($stockService, $recordService, $identifier);
 
         // Avoid hit database
         $model = $this->instance(
@@ -99,6 +107,11 @@ class RepositoryTest extends TestCase
         $identifier->expects($this->once())
             ->method('generate')
             ->willReturn($orderId);
+
+        $recordService->expects($this->once())
+            ->method('isAvailable')
+            ->with(321321)
+            ->willReturn(new Response(true));
 
         $stockService->expects($this->once())
             ->method('isAvailable')

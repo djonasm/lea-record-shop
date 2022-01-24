@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use LeaRecordShop\BaseModel;
 use LeaRecordShop\BaseRepository;
+use LeaRecordShop\Record\Service as RecordService;
 use LeaRecordShop\Response;
 use LeaRecordShop\Stock\Service as StockService;
 
@@ -21,10 +22,19 @@ class Repository extends BaseRepository
      */
     private $identifier;
 
-    public function __construct(StockService $stockService, Identifier $identifier)
-    {
+    /**
+     * @var RecordService
+     */
+    private $recordService;
+
+    public function __construct(
+        StockService $stockService,
+        RecordService $recordService,
+        Identifier $identifier
+    ) {
         $this->stockService = $stockService;
         $this->identifier = $identifier;
+        $this->recordService = $recordService;
     }
 
     protected function entity(): BaseModel
@@ -39,6 +49,11 @@ class Repository extends BaseRepository
 
     public function create(array $data): Response
     {
+        $response = $this->recordService->isAvailable($data['recordId']);
+        if (!$response->isSuccess()) {
+            return $response;
+        }
+
         $orderId = $this->identifier->generate();
         $data['id'] = $orderId;
         $response = $this->stockService->isAvailable($data['recordId'], $orderId);

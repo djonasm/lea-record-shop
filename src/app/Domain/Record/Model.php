@@ -28,6 +28,7 @@ class Model extends BaseModel
         'description',
         'fromPrice',
         'toPrice',
+        'releaseDate',
     ];
 
     protected $rules = [
@@ -40,5 +41,6 @@ class Model extends BaseModel
         'description' => 'nullable|string',
         'fromPrice' => 'nullable|numeric',
         'toPrice' => 'required|numeric',
+        'releaseDatetime' => 'nullable|date',
     ];
 }
