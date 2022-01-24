@@ -3,6 +3,7 @@
 namespace Unit\Order;
 
 use Illuminate\Support\MessageBag;
+use LeaRecordShop\Order\Identifier;
 use LeaRecordShop\Order\Model;
 use LeaRecordShop\Order\Repository;
 use LeaRecordShop\Response;
@@ -15,7 +16,8 @@ class RepositoryTest extends TestCase
     {
         // Set
         $stockService =  $this->createMock(StockService::class);
-        $repository = new Repository($stockService);
+        $identifier =  $this->createMock(Identifier::class);
+        $repository = new Repository($stockService, $identifier);
 
         // Avoid hit database
         $model = $this->instance(
@@ -26,12 +28,18 @@ class RepositoryTest extends TestCase
         $recordId = 321321;
         $model->recordId = $recordId;
 
+        $orderId = '55a057de-2b60-4ca6-a906-0e38c7e0ebc1';
         $data = [
+            'id' => $orderId,
             'userId' => 123123,
-            'recordId' => $recordId
+            'recordId' => 321321,
         ];
 
         // Expectations
+        $identifier->expects($this->once())
+            ->method('generate')
+            ->willReturn($orderId);
+
         $model->expects($this->once())
             ->method('fill')
             ->with($data)
@@ -50,6 +58,11 @@ class RepositoryTest extends TestCase
             ->with($recordId)
             ->willReturn(new Response(true));
 
+        $stockService->expects($this->once())
+            ->method('isAvailable')
+            ->with($recordId, $orderId)
+            ->willReturn(new Response(true));
+
         $model->expects($this->once())
             ->method('toArray')
             ->willReturn($data);
@@ -65,22 +78,33 @@ class RepositoryTest extends TestCase
     {
         // Set
         $stockService =  $this->createMock(StockService::class);
-        $repository = new Repository($stockService);
+        $identifier =  $this->createMock(Identifier::class);
+        $repository = new Repository($stockService, $identifier);
 
         // Avoid hit database
         $model = $this->instance(
             Model::class,
             $this->createMock(Model::class)
         );
-
+        $orderId = '55a057de-2b60-4ca6-a906-0e38c7e0ebc1';
         $data = [
+            'id' => $orderId,
             'userId' => 123123,
-            'recordId' => 321321
+            'recordId' => 321321,
         ];
 
         $errors = new MessageBag(['Invalid user id.']);
 
         // Expectations
+        $identifier->expects($this->once())
+            ->method('generate')
+            ->willReturn($orderId);
+
+        $stockService->expects($this->once())
+            ->method('isAvailable')
+            ->with(321321, $orderId)
+            ->willReturn(new Response(true));
+
         $model->expects($this->once())
             ->method('fill')
             ->with($data)

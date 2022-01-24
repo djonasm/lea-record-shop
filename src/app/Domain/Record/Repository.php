@@ -45,7 +45,7 @@ class Repository extends BaseRepository
         );
     }
 
-    public function update(int $id, array $data): Response
+    public function update($id, array $data): Response
     {
         $entity = $this->query()
             ->find($id)

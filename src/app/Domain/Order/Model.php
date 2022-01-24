@@ -19,6 +19,7 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'id',
         'userId',
         'recordId',
     ];
@@ -27,4 +28,14 @@ class Model extends BaseModel
         'userId' => 'required|exists:LeaRecordShop\User\Model,id',
         'recordId' => 'required|exists:LeaRecordShop\Record\Model,id',
     ];
+
+    public function getKeyType()
+    {
+        return 'string';
+    }
+
+    public function getIncrementing()
+    {
+        return false;
+    }
 }

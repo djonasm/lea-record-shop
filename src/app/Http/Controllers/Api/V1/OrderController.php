@@ -79,9 +79,9 @@ class OrderController extends BaseController
     /**
      * Delete a order.
      *
-     * @urlParam id integer require The id of the order.
+     * @urlParam id require The id of the order.
      */
-    public function delete(int $id): JsonResponse
+    public function delete(string $id): JsonResponse
     {
         if (!$this->repository->delete($id)) {
             return response()->json(['status' => 'failed'], 422);
@@ -93,12 +93,12 @@ class OrderController extends BaseController
     /**
      * Update a order.
      *
-     * @urlParam id integer require The id of the order.
+     * @urlParam id require The id of the order.
      *
      * @bodyParam userId int The id of the user. Example: 1
      * @bodyParam recordId int The id of the record. Example: 9
      */
-    public function update(int $id, Request $request): JsonResponse
+    public function update(string $id, Request $request): JsonResponse
     {
         $response = $this->repository->update(
             $id,
