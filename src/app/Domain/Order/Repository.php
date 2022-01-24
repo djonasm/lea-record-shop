@@ -4,6 +4,7 @@ namespace LeaRecordShop\Order;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use LeaRecordShop\BaseModel;
 use LeaRecordShop\BaseRepository;
 use LeaRecordShop\Response;
@@ -15,10 +16,15 @@ class Repository extends BaseRepository
      * @var StockService
      */
     private $stockService;
+    /**
+     * @var Identifier
+     */
+    private $identifier;
 
-    public function __construct(StockService $stockService)
+    public function __construct(StockService $stockService, Identifier $identifier)
     {
         $this->stockService = $stockService;
+        $this->identifier = $identifier;
     }
 
     protected function entity(): BaseModel
@@ -33,6 +39,12 @@ class Repository extends BaseRepository
 
     public function create(array $data): Response
     {
+        $orderId = $this->identifier->generate();
+        $data['id'] = $orderId;
+        if (!$this->stockService->isAvailable($data['recordId'], $orderId)) {
+
+        }
+
         return DB::transaction(
             function () use ($data) {
                 $response = parent::create($data);
