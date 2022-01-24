@@ -55,7 +55,19 @@ jobs:
 
       - name: Test with phpunit
         working-directory: ./src
-        run: vendor/bin/phpunit --coverage-text
+        run: vendor/bin/phpunit --coverage-text --testsuite="unit,integration"
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+      - name: Run Seeder to Acceptance tests
+        working-directory: ./src
+        run: php artisan db:seed
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+      - name: Test Acceptance tests in parallel
+        working-directory: ./src
+        run: vendor/bin/paratest --processes 50 --repeat 100 --testsuite="acceptance"
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 

@@ -58,6 +58,11 @@ class RepositoryTest extends TestCase
             ->with($recordId)
             ->willReturn(new Response(true));
 
+        $stockService->expects($this->once())
+            ->method('isAvailable')
+            ->with($recordId, $orderId)
+            ->willReturn(new Response(true));
+
         $model->expects($this->once())
             ->method('toArray')
             ->willReturn($data);
@@ -94,6 +99,11 @@ class RepositoryTest extends TestCase
         $identifier->expects($this->once())
             ->method('generate')
             ->willReturn($orderId);
+
+        $stockService->expects($this->once())
+            ->method('isAvailable')
+            ->with(321321, $orderId)
+            ->willReturn(new Response(true));
 
         $model->expects($this->once())
             ->method('fill')

@@ -41,8 +41,9 @@ class Repository extends BaseRepository
     {
         $orderId = $this->identifier->generate();
         $data['id'] = $orderId;
-        if (!$this->stockService->isAvailable($data['recordId'], $orderId)) {
-
+        $response = $this->stockService->isAvailable($data['recordId'], $orderId);
+        if (!$response->isSuccess()) {
+            return $response;
         }
 
         return DB::transaction(
@@ -62,7 +63,7 @@ class Repository extends BaseRepository
         );
     }
 
-    public function delete(int $id): bool
+    public function delete($id): bool
     {
         $entity = $this->query()
             ->find($id);

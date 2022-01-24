@@ -22,6 +22,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->uuid(),
             'userId' => $this->faker->randomNumber(),
             'recordId' => $this->faker->randomNumber(),
         ];

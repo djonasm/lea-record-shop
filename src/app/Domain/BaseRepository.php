@@ -26,7 +26,7 @@ abstract class BaseRepository
         return new Response(true, null, $entity->toArray());
     }
 
-    public function update(int $id, array $data): Response
+    public function update($id, array $data): Response
     {
         $entity = $this->query()
             ->find($id)
@@ -43,7 +43,7 @@ abstract class BaseRepository
         return new Response(true);
     }
 
-    public function delete(int $id): ?bool
+    public function delete($id): ?bool
     {
         return $this->query()
             ->find($id)
