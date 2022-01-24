@@ -42,6 +42,11 @@
     "scripts": {
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "setup": [
+            "@post-root-package-install",
+            "@composer install",
+            "php artisan migrate"
         ]
     }
 }
