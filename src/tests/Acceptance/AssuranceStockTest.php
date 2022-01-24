@@ -6,7 +6,7 @@ use LeaRecordShop\Order\Model as OrderModel;
 use LeaRecordShop\Stock\Model as StockModel;
 use Tests\TestCase;
 
-class SafeStockTest extends TestCase
+class AssuranceStockTest extends TestCase
 {
     /**
      * Record id created by database seed.

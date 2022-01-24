@@ -47,25 +47,25 @@ jobs:
         working-directory: ./src
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-      - name: Run Migration
-        working-directory: ./src
-        run: php artisan migrate
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-
       - name: Test with phpunit
         working-directory: ./src
         run: vendor/bin/phpunit --coverage-text --testsuite="unit,integration"
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
-      - name: Run Seeder to Acceptance tests
+      - name: Run Database Migration
+        working-directory: ./src
+        run: php artisan migrate
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+      - name: Run Database Seeder
         working-directory: ./src
         run: php artisan db:seed
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
-      - name: Test Acceptance tests in parallel
+      - name: Test stock assurance with many processes in parallel
         working-directory: ./src
         run: vendor/bin/paratest --processes 50 --repeat 100 --testsuite="acceptance"
         env:
