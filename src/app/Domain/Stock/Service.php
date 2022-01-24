@@ -40,8 +40,10 @@ class Service
             return new Response(false, $errors);
         }
 
+        // Generate random stock key using stock quantity
+        $randomStockKey = rand(1, $entity->stockQuantiy);
         // Reserve key, stock_2_300, means the order will try reserve stock 300 of stock id: 2.
-        $key = 'stock_' . $entity->id . '_' . $entity->stockQuantiy;
+        $key = 'stock_' . $entity->id . '_' . $randomStockKey;
 
         // The Cache::add method will only add the item to the cache if it does not already exist
         if (!Cache::add($key, $orderId, 5)) {
