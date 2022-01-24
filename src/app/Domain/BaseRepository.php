@@ -12,11 +12,6 @@ abstract class BaseRepository
 
     abstract protected function query(): Builder;
 
-    public function first($id): BaseModel
-    {
-        return $this->query()->first($id);
-    }
-
     public function create(array $data): Response
     {
         $entity = $this->entity()->fill($data);
