@@ -2,26 +2,42 @@
 
 namespace LeaRecordShop\Order;
 
+use LeaRecordShop\Record\Service as RecordService;
+use LeaRecordShop\Response;
+use LeaRecordShop\Stock\Service as StockService;
+
 class Service
 {
-    public function list(
-        ?string $userId = null,
-        ?string $startDate = null,
-        ?string $endDate = null
-    ): array {
-        $query = Model::query();
-        if ($userId) {
-            $query->where(compact('userId'));
+    /**
+     * @var StockService
+     */
+    private $stockService;
+
+    /**
+     * @var RecordService
+     */
+    private $recordService;
+
+    public function __construct(
+        StockService $stockService,
+        RecordService $recordService
+    ) {
+        $this->stockService = $stockService;
+        $this->recordService = $recordService;
+    }
+
+    public function isRecordAvailable(int $recordId, string $orderId): Response
+    {
+        $response = $this->recordService->isAvailable($recordId);
+        if (!$response->isSuccess()) {
+            return $response;
         }
 
-        if ($startDate) {
-            $query->where('createdAt', '>=', $startDate);
+        $response = $this->stockService->isAvailable($recordId, $orderId);
+        if (!$response->isSuccess()) {
+            return $response;
         }
 
-        if ($endDate) {
-            $query->where('createdAt', '<=', $endDate);
-        }
-
-        return $query->get()->toArray();
+        return new Response(true);
     }
 }

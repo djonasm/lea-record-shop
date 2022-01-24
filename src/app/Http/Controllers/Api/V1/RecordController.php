@@ -16,18 +16,12 @@ use LeaRecordShop\Record\Service;
 class RecordController extends BaseController
 {
     /**
-     * @var Service $service
-     */
-    private $service;
-
-    /**
      * @var Repository
      */
     private $repository;
 
-    public function __construct(Service $service, Repository $repository)
+    public function __construct(Repository $repository)
     {
-        $this->service = $service;
         $this->repository = $repository;
     }
 
@@ -44,7 +38,7 @@ class RecordController extends BaseController
      */
     public function list(Request $request): JsonResponse
     {
-        $data = $this->service->list(
+        $data = $this->repository->list(
             $request->get('genre'),
             $request->get('releaseYear'),
             $request->get('artist'),

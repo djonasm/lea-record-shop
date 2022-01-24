@@ -4,59 +4,65 @@ namespace LeaRecordShop\Order;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use LeaRecordShop\BaseModel;
 use LeaRecordShop\BaseRepository;
-use LeaRecordShop\Record\Service as RecordService;
 use LeaRecordShop\Response;
 use LeaRecordShop\Stock\Service as StockService;
 
 class Repository extends BaseRepository
 {
     /**
-     * @var StockService
-     */
-    private $stockService;
-    /**
      * @var Identifier
      */
     private $identifier;
 
     /**
-     * @var RecordService
+     * @var Service
      */
-    private $recordService;
+    private $service;
+
+    /**
+     * @var StockService
+     */
+    private $stockService;
 
     public function __construct(
+        Service $service,
         StockService $stockService,
-        RecordService $recordService,
         Identifier $identifier
     ) {
-        $this->stockService = $stockService;
         $this->identifier = $identifier;
-        $this->recordService = $recordService;
+        $this->service = $service;
+        $this->stockService = $stockService;
     }
 
-    protected function entity(): BaseModel
-    {
-        return app(Model::class);
-    }
+    public function list(
+        ?string $userId = null,
+        ?string $startDate = null,
+        ?string $endDate = null
+    ): array {
+        $query = Model::query();
+        if ($userId) {
+            $query->where(compact('userId'));
+        }
 
-    protected function query(): Builder
-    {
-        return Model::query();
+        if ($startDate) {
+            $query->where('createdAt', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->where('createdAt', '<=', $endDate);
+        }
+
+        return $query->get()->toArray();
     }
 
     public function create(array $data): Response
     {
-        $response = $this->recordService->isAvailable($data['recordId']);
-        if (!$response->isSuccess()) {
-            return $response;
-        }
-
         $orderId = $this->identifier->generate();
         $data['id'] = $orderId;
-        $response = $this->stockService->isAvailable($data['recordId'], $orderId);
+
+        $response = $this->service->isRecordAvailable($data['recordId'], $orderId);
         if (!$response->isSuccess()) {
             return $response;
         }
@@ -132,5 +138,15 @@ class Repository extends BaseRepository
                 return $response;
             }
         );
+    }
+
+    protected function entity(): BaseModel
+    {
+        return app(Model::class);
+    }
+
+    protected function query(): Builder
+    {
+        return Model::query();
     }
 }

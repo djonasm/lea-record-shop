@@ -17,4 +17,9 @@ class Repository extends BaseRepository
     {
         return Model::query();
     }
+
+    private function record(int $recordId)
+    {
+        return Model::where(compact('recordId'))->first();
+    }
 }
