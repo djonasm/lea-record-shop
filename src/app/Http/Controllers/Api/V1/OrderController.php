@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use LeaRecordShop\Order\Repository;
 use LeaRecordShop\Order\Service;
-use InvalidArgumentException;
 
 /**
  * @group Order management
@@ -17,18 +16,12 @@ use InvalidArgumentException;
 class OrderController extends BaseController
 {
     /**
-     * @var Service $service
-     */
-    private $service;
-
-    /**
      * @var Repository
      */
     private $repository;
 
-    public function __construct(Service $service, Repository $repository)
+    public function __construct(Repository $repository)
     {
-        $this->service = $service;
         $this->repository = $repository;
     }
 
@@ -44,7 +37,7 @@ class OrderController extends BaseController
      */
     public function list(Request $request): JsonResponse
     {
-        $data = $this->service->list(
+        $data = $this->repository->list(
             $request->get('userId'),
             $request->get('startDate'),
             $request->get('endDate'),

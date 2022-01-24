@@ -24,6 +24,7 @@ class CreateRecordsTable extends Migration
             $table->text('description');
             $table->float('fromPrice');
             $table->float('toPrice');
+            $table->dateTime('releaseDatetime')->nullable();
             $table->timestamp('createdAt')->nullable();
             $table->timestamp('updatedAt')->nullable();
         });

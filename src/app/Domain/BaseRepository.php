@@ -4,6 +4,7 @@ namespace LeaRecordShop;
 
 use Illuminate\Database\Eloquent\Builder;
 use InvalidArgumentException;
+use LeaRecordShop\Stock\Model;
 
 abstract class BaseRepository
 {
@@ -26,6 +27,9 @@ abstract class BaseRepository
         return new Response(true, null, $entity->toArray());
     }
 
+    /**
+     * @param $id string|int
+     */
     public function update($id, array $data): Response
     {
         $entity = $this->query()
@@ -43,6 +47,9 @@ abstract class BaseRepository
         return new Response(true);
     }
 
+    /**
+     * @param $id string|int
+     */
     public function delete($id): ?bool
     {
         return $this->query()

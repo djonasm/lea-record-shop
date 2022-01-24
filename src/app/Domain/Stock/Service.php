@@ -10,7 +10,7 @@ class Service
 {
     public function decrementQuantity(int $recordId): Response
     {
-        $entity = $this->first($recordId);
+        $entity = $this->firstByRecordId($recordId);
         if (!$entity || $entity->stockQuantity < 1) {
             $errors = new MessageBag(['Insufficient stock quantity.']);
 
@@ -24,7 +24,7 @@ class Service
 
     public function incrementQuantity(int $recordId): Response
     {
-        $entity = $this->first($recordId);
+        $entity = $this->firstByRecordId($recordId);
 
         $isSuccess = $entity->increment('stockQuantity');
 
@@ -33,7 +33,7 @@ class Service
 
     public function isAvailable(int $recordId, string $orderId): Response
     {
-        $entity = $this->first($recordId);
+        $entity = $this->firstByRecordId($recordId);
         $errors = new MessageBag(['Insufficient stock quantity.']);
 
         if ($entity->stockQuantity <= 0) {
@@ -59,7 +59,7 @@ class Service
         return new Response(true);
     }
 
-    private function first(int $recordId)
+    private function firstByRecordId(int $recordId)
     {
         return Model::where(compact('recordId'))->first();
     }

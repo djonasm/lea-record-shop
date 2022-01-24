@@ -16,18 +16,12 @@ use LeaRecordShop\Record\Service;
 class RecordController extends BaseController
 {
     /**
-     * @var Service $service
-     */
-    private $service;
-
-    /**
      * @var Repository
      */
     private $repository;
 
-    public function __construct(Service $service, Repository $repository)
+    public function __construct(Repository $repository)
     {
-        $this->service = $service;
         $this->repository = $repository;
     }
 
@@ -44,7 +38,7 @@ class RecordController extends BaseController
      */
     public function list(Request $request): JsonResponse
     {
-        $data = $this->service->list(
+        $data = $this->repository->list(
             $request->get('genre'),
             $request->get('releaseYear'),
             $request->get('artist'),
@@ -67,6 +61,7 @@ class RecordController extends BaseController
      * @bodyParam fromPrice number required The from price of the record. Example: 120.01
      * @bodyParam toPrice number required The to price of the record. Example: 99.99
      * @bodyParam stockQuantity int required The stock quantity of the record. Example: 200
+     * @bodyParam releaseDatetime string The release datetime of the record(Y-m-d H:i:s format). Example: 2022-01-29 00:00:00
      *
      * @response scenario=success {
      *  "id": 4,
@@ -80,6 +75,7 @@ class RecordController extends BaseController
      *  "fromPrice": 30.00,
      *  "toPrice": 19.90,
      *  "stockQuantity": 2,
+     *  "releaseDatetime": 2022-01-29 00:00:00,
      * }
      *
      * @response status=422 scenario="Invalid input {"status": "failed", "message": "Invalid Input"}
@@ -98,6 +94,7 @@ class RecordController extends BaseController
                 'fromPrice',
                 'toPrice',
                 'stockQuantity',
+                'releaseDatetime',
             )
         );
 
@@ -133,6 +130,7 @@ class RecordController extends BaseController
      * @bodyParam fromPrice number The from price of the record. Example: 120.01
      * @bodyParam toPrice number The to price of the record. Example: 99.99
      * @bodyParam stockQuantity int The stock quantity of the record. Example: 200
+     * @bodyParam releaseDatetime string The release datetime of the record(Y-m-d H:i:s format). Example: 2022-01-29 00:00:00
      */
     public function update(int $id, Request $request): JsonResponse
     {
@@ -148,6 +146,7 @@ class RecordController extends BaseController
                 'fromPrice',
                 'toPrice',
                 'stockQuantity',
+                'releaseDatetime',
             )
         );
 

@@ -6,6 +6,8 @@ use Illuminate\Support\MessageBag;
 use LeaRecordShop\Order\Identifier;
 use LeaRecordShop\Order\Model;
 use LeaRecordShop\Order\Repository;
+use LeaRecordShop\Order\Service;
+use LeaRecordShop\Record\Service as RecordService;
 use LeaRecordShop\Response;
 use LeaRecordShop\Stock\Service as StockService;
 use Tests\TestCase;
@@ -17,7 +19,8 @@ class RepositoryTest extends TestCase
         // Set
         $stockService =  $this->createMock(StockService::class);
         $identifier =  $this->createMock(Identifier::class);
-        $repository = new Repository($stockService, $identifier);
+        $service =  $this->createMock(Service::class);
+        $repository = new Repository($service, $stockService , $identifier);
 
         // Avoid hit database
         $model = $this->instance(
@@ -58,9 +61,9 @@ class RepositoryTest extends TestCase
             ->with($recordId)
             ->willReturn(new Response(true));
 
-        $stockService->expects($this->once())
-            ->method('isAvailable')
-            ->with($recordId, $orderId)
+        $service->expects($this->once())
+            ->method('isRecordAvailable')
+            ->with(321321, $orderId)
             ->willReturn(new Response(true));
 
         $model->expects($this->once())
@@ -79,7 +82,8 @@ class RepositoryTest extends TestCase
         // Set
         $stockService =  $this->createMock(StockService::class);
         $identifier =  $this->createMock(Identifier::class);
-        $repository = new Repository($stockService, $identifier);
+        $service =  $this->createMock(Service::class);
+        $repository = new Repository($service, $stockService , $identifier);
 
         // Avoid hit database
         $model = $this->instance(
@@ -100,8 +104,8 @@ class RepositoryTest extends TestCase
             ->method('generate')
             ->willReturn($orderId);
 
-        $stockService->expects($this->once())
-            ->method('isAvailable')
+        $service->expects($this->once())
+            ->method('isRecordAvailable')
             ->with(321321, $orderId)
             ->willReturn(new Response(true));
 
