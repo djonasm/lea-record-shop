@@ -53,6 +53,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        return parent::render($request, $e);
+        return response()->json(['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
     }
 }

@@ -1,21 +1,18 @@
 <?php
 
-namespace Unit\Record;
+namespace Unit\User;
 
 use Illuminate\Support\MessageBag;
-use LeaRecordShop\Record\Model;
-use LeaRecordShop\Record\Repository;
-use LeaRecordShop\Response;
-use LeaRecordShop\Stock\Repository as StockRepository;
+use LeaRecordShop\User\Model;
+use LeaRecordShop\User\Repository;
 use Tests\TestCase;
 
 class RepositoryTest extends TestCase
 {
-    public function testShouldCreateRecordWithSuccess(): void
+    public function testShouldCreateUserWithSuccess(): void
     {
         // Set
-        $stockRepository = $this->createMock(StockRepository::class);
-        $repository = new Repository($stockRepository);
+        $repository = new Repository();
 
         // Avoid hit database
         $model = $this->instance(
@@ -23,17 +20,14 @@ class RepositoryTest extends TestCase
             $this->createMock(Model::class)
         );
 
+        $recordId = 321321;
+        $model->recordId = $recordId;
+
         $data = [
-            'genre' => 'vocal',
-            'releaseYear' => 2019,
-            'artist' => 'Junior Carelli',
-            'name' => 'Temple of Shadows',
-            'label' => 'Angra Records',
-            'trackList' => json_encode(['Nova Era', 'Cavaleiro dos Zodíacos']),
-            'description' => 'Best Album ever made',
-            'fromPrice' => 180.00,
-            'toPrice' => 119.99,
-            'stockQuantity' => 99,
+            'name' => 'John Days',
+            'email' => 'johndays@johndays.com',
+            'gender' => 'other',
+            'address' => 'Rua Joao Dias',
         ];
 
         // Expectations
@@ -54,23 +48,17 @@ class RepositoryTest extends TestCase
             ->method('toArray')
             ->willReturn($data);
 
-        $stockRepository->expects($this->once())
-            ->method('create')
-            ->willReturn(new Response(true));
-
         // Actions
         $result = $repository->create($data);
 
         // Assertions
         $this->assertTrue($result->isSuccess());
-        $this->assertSame($data, $result->data());
     }
 
     public function testShouldResponseWithErrorsWhenCreateFailed(): void
     {
         // Set
-        $stockRepository = $this->createMock(StockRepository::class);
-        $repository = new Repository($stockRepository);
+        $repository = new Repository();
 
         // Avoid hit database
         $model = $this->instance(
@@ -79,18 +67,13 @@ class RepositoryTest extends TestCase
         );
 
         $data = [
-            'genre' => 'vocal',
-            'releaseYear' => 2019,
-            'artist' => 'Junior Carelli',
-            'name' => 'Temple of Shadows',
-            'label' => 'Angra Records',
-            'trackList' => json_encode(['Nova Era', 'Cavaleiro dos Zodíacos']),
-            'description' => 'Best Album ever made',
-            'fromPrice' => 180.00,
-            'toPrice' => 119.99,
+            'name' => 'John Days',
+            'email' => 'johndays@johndays.com',
+            'gender' => 'other',
+            'address' => 123,
         ];
 
-        $errors = new MessageBag(['Invalid record name.']);
+        $errors = new MessageBag(['Invalid address parameter.']);
 
         // Expectations
         $model->expects($this->once())
@@ -111,6 +94,6 @@ class RepositoryTest extends TestCase
 
         // Assertions
         $this->assertFalse($result->isSuccess());
-        $this->assertSame('Invalid record name.', $result->errors()->first());
+        $this->assertSame('Invalid address parameter.', $result->errors()->first());
     }
 }

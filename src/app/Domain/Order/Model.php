@@ -19,13 +19,12 @@ class Model extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'id',
         'userId',
         'recordId',
     ];
 
     protected $rules = [
-        'userId' => 'required|integer',
+        'userId' => 'required|exists:LeaRecordShop\User\Model,id',
         'recordId' => 'required|exists:LeaRecordShop\Record\Model,id',
     ];
 }
