@@ -46,3 +46,20 @@ Should now be able to visit the documentation on: http://localhost/docs
 
 You should see something similar to this:
 ![LeaRecordAPIDocs](https://user-images.githubusercontent.com/1079090/151680362-e7150922-2c91-4b6d-af32-e1dedd608601.png)
+
+## Deploy 
+To deploy the application, the AWS Elastic Beanstalk service can be used it is necessary to configure a cache server (Redis) and database (MySQL).
+
+### Elastic Beanstalk
+
+AWS Elastic Beanstalk is an easy-to-use service for deploying and scaling web applications and services. AWS Elastic Beanstalk is an easy-to-use service for deploying and scaling web applications and services
+
+[Deploying a Laravel application to Elastic Beanstalk](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/php-laravel-tutorial.html#php-laravel-tutorial-database)
+
+### Amazon RDS
+The existing setup with docker is for development only, so it is necessary to configure a database to ensure the application works property.
+
+### Amazon ElastiCache
+it is necessary to configure a cache server, because currently the stock reservation is being made using file or memory, and if there were several servers the stock reservation would not work. The link above already includes the configuration with the database.
+
+[Setting up a Redis Cluster for scalability and high availability](https://aws.amazon.com/getting-started/hands-on/setting-up-a-redis-cluster-with-amazon-elasticache/)
